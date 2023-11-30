@@ -1,0 +1,821 @@
+///////////////////////
+
+/// Shell Scripting
+
+#!/bin/bash
+
+arr=(1 2 3 4 5 6 7 8 9 10)
+echo "Array is ${arr[@]}"
+
+echo "Choose an array operation to perform"
+echo "1. Print array length"
+echo "2. Insert an element"
+echo "3. Delete an element"
+
+read choice
+case $choice in
+    1) echo "Array length is ${#arr[@]}"
+    ;;
+    2) echo "Enter the element to insert"
+        read element
+        echo "Enter the position to insert"
+        read position
+        arr=(${arr[@]:0:$position} $element ${arr[@]:$position})
+        echo "Array is ${arr[@]}"
+    ;;
+    3) eecho "Enter the position to delete"
+        read position
+        unset arr[$position]
+        echo "Array is ${arr[@]}"
+    ;;
+esac
+
+////basic arithmetic 
+
+echo "Enter a number"
+read a
+echo "Enter another number"
+read b
+echo "Addition of two numbers is" $[a+b]
+echo "Multiplication of two numbers is" $[a*b]
+echo "Substraction of two numbers is" $[a-b]
+echo "Division of two numbers is" $[a/b]
+echo "Modulous of two numbers is" $[a%b]
+/////
+
+////cli.sh
+
+#!/bin/bash
+
+if [ $# -eq 0 ]
+then
+    echo "No arguments supplied"
+    echo "If you don't know what the program does!"
+    echo "pass your roll number as an argument to check result."
+    exit 1
+fi
+
+if [ $1 -eq 1 ]
+then
+    echo "Pass"
+elif [ $1 -eq 2 ]
+then
+    echo "Pass"
+elif [ $1 -eq 3 ]
+then
+    echo "Fail"
+else
+    echo "Invalid roll number"
+fi
+
+/////////////////
+
+control_structure
+
+echo "Enter VOLP username"
+read email
+echo "Enter VOLP password"
+read -s password
+
+if test $email = "tilak@vit.edu"
+    then
+        echo "Valid Email"
+        if test $password = "1234abcd"
+            then
+                echo "Login Successful"
+                echo "Enter roll number to view result"
+                read roll
+                case $roll in
+                    1) echo "Pass" 
+                    ;;
+                    2) echo "Pass" 
+                    ;;
+                    3) echo "Fail" 
+                    ;;
+                esac
+        fi
+    else
+        echo "Invalid Credentials"
+fi
+
+//////////
+
+// function.sh 
+
+#!/bin/bash
+
+function palindrome()
+{
+    num=$1
+    rev=0
+    while [ $num -gt 0 ]
+    do
+        rem=`expr $num % 10`
+        rev=`expr $rev \* 10 + $rem`
+        num=`expr $num / 10`
+    done
+    if [ $rev -eq $1 ]
+    then
+        echo "Palindrome"
+    else
+        echo "Not Palindrome"
+    fi
+}
+
+function fibo()
+{
+    num=$1
+    a=0
+    b=1
+    echo "Fibonacci series is"
+    echo $a
+    echo $b
+    for (( i=2; i<$num; i++ ))
+    do
+        c=`expr $a + $b`
+        echo $c
+        a=$b
+        b=$c
+    done
+}
+
+function factorial()
+{
+    num=$1
+    fact=1
+    for (( i=1; i<=$num; i++ ))
+    do
+        fact=`expr $fact \* $i`
+    done
+    echo "Factorial of $num is $fact"
+}
+
+echo "What do you want to do?"
+echo "1. Check if a number is palindrome or not"
+echo "2. Print fibonacci series"
+echo "3. Print factorial of a number"
+read choice
+case $choice in
+    1) echo "Enter a number"
+        read num
+        palindrome $num
+    ;;
+    2) echo "Enter a number"
+        read num
+        fibo $num
+    ;;
+    3) echo "Enter a number"
+        read num
+        factorial $num
+    ;;
+esac
+
+///////////////////
+
+///
+//check the count of number of substrings in given string
+
+if [ $# -ne 2 ]; then
+  echo "Usage: $0 <substring> <string>"
+  exit 1
+fi
+
+substring=$1
+string=$2
+
+count=$(echo $string | grep -o $substring | wc -l)
+
+echo "The substring '$substring' occurs $count times in the string '$string'"
+
+--------------------------------------------------------------------------------------------------
+
+//prime check and reverse
+
+
+if [ $# -ne 1 ]; then
+  echo "Usage: $0 <number>"
+  exit 1
+fi
+
+num=$1
+temp=$num
+
+# Reverse the number
+rev=0
+while [ $temp -gt 0 ]
+do
+  rem=$((temp % 10))
+  rev=$((rev * 10 + rem))
+  temp=$((temp / 10))
+done
+
+echo "Reverse of $1 is $rev"
+
+# Check if the number is less than 2
+if [ $num -lt 2 ]; then
+  echo "$num is not a prime number"
+  exit 0
+fi
+
+
+# Check if the number is divisible by any number between 2 and the square root of the number
+for (( i=2; i*i<=num; i++ ))
+do
+  if [ $((num % i)) -eq 0 ]; then
+    echo "$num is not a prime number"
+    exit 0
+  fi
+done
+
+----------------------------------------------------------------------------------------------------------
+
+//recursive and non recursive factorial
+# Recursive function to calculate the factorial of a number
+function factorial_recursive {
+    if [ $1 -eq 1 ]
+    then
+        echo 1
+    else
+        local previous_factorial=$(factorial_recursive $(( $1 - 1 )))
+        echo $(( $1 * $previous_factorial ))
+    fi
+}
+
+
+# Non-recursive function to calculate the factorial of a number
+function factorial_non_recursive {
+    local num=$1
+    local result=1
+    while [ $num -gt 1 ]
+    do
+        result=$(( $result * $num ))
+        num=$(( $num - 1 ))
+    done
+    echo $result
+}
+
+# Prompt the user to enter a number
+echo "Enter a number: "
+read num
+
+# Calculate the factorial using the recursive method
+factorial_recursive=$(factorial_recursive $num)
+echo "Factorial using recursion: $factorial_recursive"
+
+# Calculate the factorial using the non-recursive method
+factorial_non_recursive=$(factorial_non_recursive $num)
+echo "Factorial using non-recursion: $factorial_non_recursive"
+
+--------------------------------------------------------------------------------------------------------------
+
+//checking string if palindrome or not
+
+#!/bin/bash
+
+# Prompt the user to enter a number
+echo "Enter a number: "
+read num
+
+# Store the original number in a variable
+original=$num
+
+# Reverse the number
+reverse=0
+while [ $num -gt 0 ]
+do
+    remainder=$(( $num % 10 ))
+    reverse=$(( $reverse * 10 + $remainder ))
+    num=$(( $num / 10 ))
+done
+
+# Check if the original number is equal to the reversed number
+if [ $original -eq $reverse ]
+then
+    echo "The number $original is a palindrome"
+else
+    echo "The number $original is not a palindrome"
+fi
+
+# Print the reverse of the original number
+echo "The reverse of $original is $reverse"
+
+echo "$num is a prime number"
+
+////////////////
+
+echo "Enter which loop to use"
+echo "1. For loop"
+echo "2. While loop"
+echo "3. Until loop"
+
+read choice
+case $choice in
+    1) echo "Enter a number"
+        read num
+        for (( i=1; i<=num; i++ ))
+            do
+                echo $i
+            done
+    ;;
+    2) echo "Enter a number"
+        read num
+        i=1
+        while [ $i -le $num ]
+            do
+                echo $i
+                i=`expr $i + 1`
+            done
+    ;;
+    3) echo "Enter a number"
+        read num
+        i=1
+        until [ $i -gt $num ]
+            do
+                echo $i
+                i=`expr $i + 1`
+            done
+    ;;
+esac
+
+/////////////////////////////
+
+strings.sh
+
+#!/bin/bash
+
+# write a program to perform the following operations on two strings
+# 1. Length of a string
+# 2. Concatenation of two strings
+# 3. Change case to lowercase
+# 4. Change case to uppercase
+# 5. Slice a string
+
+echo "Enter string 1"
+read str1
+echo "Enter string 2"
+read str2
+
+echo "Choose an operation to perform"
+echo "1. Length of a string"
+echo "2. Concatenation of two strings"
+echo "3. Change case to lowercase"
+echo "4. Change case to uppercase"
+echo "5. Slice a string"
+
+read choice
+
+case $choice in
+    1) echo "Length of string 1 is ${#str1}"
+        echo "Length of string 2 is ${#str2}"
+    ;;
+    2) echo "Concatenation of two strings is $str1$str2"
+    ;;
+    3) echo "Lowercase of string 1 is ${str1,,}"
+        echo "Lowercase of string 2 is ${str2,,}"
+    ;;
+    4) echo "Uppercase of string 1 is ${str1^^}"
+        echo "Uppercase of string 2 is ${str2^^}"
+    ;;
+    5) echo "Enter the position to slice"
+        read position
+        echo "Enter the length to slice"
+        read length
+        echo "Sliced string is ${str1:position:length}"
+    ;;
+esac
+
+/////////////////
+
+/// rwmutex.c
+
+#include <stdio.h>
+#include <stdbool.h>
+
+struct semaphore
+{
+	int mutex;
+	int rcount;
+	int rwait;
+	bool wrt;
+};
+
+void addR(struct semaphore *s)
+{
+	if (s->mutex == 0 && s->rcount == 0)
+	{
+		printf("\nSorry, File open in Write mode.\nNew Reader added to queue.\n");
+		s->rwait++;
+	}
+	else
+	{
+		printf("\nReader Process added.\n");
+		s->rcount++;
+		s->mutex--;
+	}
+	
+	return ;
+}
+
+void addW(struct semaphore *s)
+{
+	if(s->mutex==1)
+	{
+		s->mutex--;
+		s->wrt=1;
+		printf("\nWriter Process added.\n");
+	}	
+	else if(s->wrt)
+	{
+		printf("\nSorry, Writer already operational.\n");
+	}
+	else
+    {
+		printf("\nSorry, File open in Read mode.\n");
+    }
+    
+	return;
+}
+
+void remR(struct semaphore *s)
+{
+	if(s->rcount == 0)
+    {
+		printf("\nNo readers to remove.\n");
+    }
+	else
+	{
+		printf("\nReader Removed.\n");
+		s->rcount--;
+		s->mutex++;
+	}
+
+	return ;
+}
+
+void remW(struct semaphore *s)
+{
+	if(s->wrt==0)
+    {
+		printf("\nNo Writer to Remove");
+    }
+	else
+	{
+		printf("\nWriter Removed\n");
+		s->mutex++;
+		s->wrt=0;
+		if(s->rwait!=0)
+		{
+			s->mutex-=s->rwait;
+			s->rcount=s->rwait;
+			s->rwait=0;
+			printf("%d Waiting Readers Added.",s->rcount);
+		}
+	}
+}
+
+int main()
+{
+	struct semaphore S1={1,0,0};
+	printf("User\n");
+	while(1)
+	{
+		printf("Options :-\n1.Add Reader.\n2.Add Writer.\n3.Remove Reader.\n4.Remove Writer.\n5.Exit.\n\n\tChoice : ");
+
+		int ch;
+		scanf("%d",&ch);
+
+		switch(ch)
+		{
+		case 1:
+		{
+			addR(&S1); 
+			break;
+		}
+
+		case 2:
+		{
+			addW(&S1); 
+			break;
+		}
+
+		case 3:
+		{
+			remR(&S1); 
+			break;
+		}
+
+		case 4:
+		{
+			remW(&S1); 
+			break;
+		}
+
+		case 5:
+		{
+			return 0;
+		}
+
+		default:
+        	printf("\nInvalid Entry!");
+
+		continue;
+
+		}
+		printf("\nCurrently->\n\tMutex\t\t:\t%d\n\tActive Readers\t:\t%d\n\tWaitingReaders\t:\t%d\n\tWriter Active\t:\t%s\n\n",S1.mutex, S1.rcount, S1.rwait,(S1.mutex==0 && S1.rcount==0)?"YES" : "NO");
+	}
+}
+
+////////////////////////////
+
+//pcsema.c
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int mutex = 1, full = 0, empty = 3, x = 0;
+
+int main()
+{
+    int n;
+    void producer();
+    void consumer();
+    int wait(int);
+    int signal(int);
+    printf("\n1.Producer\n2.Consumer\n3.Exit");
+    while (1)
+    {
+        printf("\nEnter your choice:");
+        scanf("%d", &n);
+        switch (n)
+        {
+
+        case 1:
+            if ((mutex == 1) && (empty != 0))
+                producer();
+            else
+                printf("Buffer is full!!");
+            break;
+        case 2:
+            if ((mutex == 1) && (full != 0))
+                consumer();
+            else
+                printf("Buffer is empty!!");
+            break;
+        case 3:
+            exit(0);
+            break;
+        }
+    }
+    return 0;
+}
+
+int wait(int s)
+{
+    return (--s);
+}
+
+int signal(int s)
+{
+    return (++s);
+}
+
+void producer()
+{
+    mutex = wait(mutex);
+    full = signal(full);
+    empty = wait(empty);
+    x++;
+    printf("\nProducer produces the item %d", x);
+    mutex = signal(mutex);
+}
+
+void consumer()
+{
+    mutex = wait(mutex);
+    full = wait(full);
+    empty = signal(empty);
+    printf("\nConsumer consumes item %d", x);
+    x--;
+    mutex = signal(mutex);
+}
+
+///////////////
+
+//pc mutex.c
+
+
+// C program for the above approach
+
+#include <stdio.h>
+#include <stdlib.h>
+
+// Initialize a mutex to 1
+int mutex = 1;
+
+// Number of full slots as 0
+int full = 0;
+
+// Number of empty slots as size
+// of buffer
+int empty = 10, x = 0;
+
+// Function to produce an item and
+// add it to the buffer
+void producer()
+{
+    // Decrease mutex value by 1
+    --mutex;
+
+    // Increase the number of full
+    // slots by 1
+    ++full;
+
+    // Decrease the number of empty
+    // slots by 1
+    --empty;
+
+    // Item produced
+    x++;
+    printf("\nProducer produces"
+           "item %d",
+           x);
+
+    // Increase mutex value by 1
+    ++mutex;
+}
+
+// Function to consume an item and
+// remove it from buffer
+void consumer()
+{
+    // Decrease mutex value by 1
+    --mutex;
+
+    // Decrease the number of full
+    // slots by 1
+    --full;
+
+    // Increase the number of empty
+    // slots by 1
+    ++empty;
+    printf("\nConsumer consumes "
+           "item %d",
+           x);
+    x--;
+
+    // Increase mutex value by 1
+    ++mutex;
+}
+
+// Driver Code
+int main()
+{
+    int n, i;
+    printf("\n1. Press 1 for Producer"
+           "\n2. Press 2 for Consumer"
+           "\n3. Press 3 for Exit");
+
+    for (i = 1; i > 0; i++)
+    {
+
+        printf("\nEnter your choice:");
+        scanf("%d", &n);
+
+        // Switch Cases
+        switch (n)
+        {
+        case 1:
+
+            // If mutex is 1 and empty
+            // is non-zero, then it is
+            // possible to produce
+            if ((mutex == 1) && (empty != 0))
+            {
+                producer();
+            }
+
+            // Otherwise, print buffer
+            // is full
+            else
+            {
+                printf("Buffer is full!");
+            }
+            break;
+
+        case 2:
+
+            // If mutex is 1 and full
+            // is non-zero, then it is
+            // possible to consume
+            if ((mutex == 1) && (full != 0))
+            {
+                consumer();
+            }
+
+            // Otherwise, print Buffer
+            // is empty
+            else
+            {
+                printf("Buffer is empty!");
+            }
+            break;
+
+        // Exit Condition
+        case 3:
+            exit(0);
+            break;
+        }
+    }
+}
+
+////////////////
+//
+Dining philoshper .c
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N 5 // Number of philosophers
+
+int forks[N]; // Array to keep track of which forks are in use
+
+void pick_up_forks(int id)
+{
+    int left_fork = id;
+    int right_fork = (id + 1) % N;
+
+    // Wait until both forks are available
+    while (forks[left_fork] || forks[right_fork])
+    {
+        // Do nothing
+    }
+
+    // Pick up the forks
+    forks[left_fork] = 1;
+    forks[right_fork] = 1;
+}
+
+void put_down_forks(int id)
+{
+    int left_fork = id;
+    int right_fork = (id + 1) % N;
+
+    // Put down the forks
+    forks[left_fork] = 0;
+    forks[right_fork] = 0;
+}
+
+void philosopher(int id)
+{
+    while (1)
+    {
+        // Think for a random amount of time
+        printf("Philosopher %d is thinking\n", id);
+        srand(time(NULL));
+        int thinking_time = rand() % 5;
+        sleep(thinking_time);
+
+        // Pick up the forks
+        printf("Philosopher %d is hungry\n", id);
+        pick_up_forks(id);
+
+        // Eat for a random amount of time
+        printf("Philosopher %d is eating\n", id);
+        int eating_time = rand() % 5;
+        sleep(eating_time);
+
+        // Put down the forks
+        put_down_forks(id);
+    }
+}
+
+int main()
+{
+    int i;
+
+    // Initialize forks array
+    for (i = 0; i < N; i++)
+    {
+        forks[i] = 0;
+    }
+
+    // Create philosopher processes
+    for (i = 0; i < N; i++)
+    {
+        if (fork() == 0)
+        {
+            philosopher(i);
+            exit(0);
+        }
+    }
+
+    // Wait for philosopher processes to finish
+    for (i = 0; i < N; i++)
+    {
+        wait(NULL);
+    }
+
+    return 0;
+}
+
